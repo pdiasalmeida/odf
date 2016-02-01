@@ -4,5 +4,6 @@
 
 # built file
 *.o
+*.so*
 odf
 

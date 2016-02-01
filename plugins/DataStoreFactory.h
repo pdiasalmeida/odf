@@ -7,6 +7,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <stdexcept>
 
 namespace PluginEngine {
 
@@ -14,15 +15,15 @@ namespace PluginEngine {
 
   // Manages storage related stuff
   class DataStoreFactory {
-  	  public: typedef struct Rect {
-  		  int x;
-  		  int y;
-  		  int width;
-  		  int height;
-  	  } Rect;
 
   	  // Manages output from our object detector
   	  public: class DataStore {
+  	  	  public: typedef struct Rect {
+  	  		  int x;
+  	  		  int y;
+  	  		  int width;
+  	  		  int height;
+  	  	  } Rect;
 
   		  // Releases any resources owned by the store
       	  public: virtual ~DataStore() {}

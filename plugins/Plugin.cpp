@@ -10,7 +10,7 @@ namespace PluginEngine {
 
 	// ----------------------------------------------------------------------- //
 
-	Plugin::Plugin(const std::string &filename) :
+	PLUGINENGINE_API Plugin::Plugin(const std::string &filename) :
 		sharedLibraryHandle(0),
 		referenceCount(0),
 		getEngineVersionAddress(0),
@@ -39,7 +39,7 @@ namespace PluginEngine {
 
 	// Creates a copy of a plugin that has already been loaded.
 	// Required to provide correct semantics for storing plugins in a STL map container.
-	Plugin::Plugin(const Plugin &other) :
+	PLUGINENGINE_API Plugin::Plugin(const Plugin &other) :
 		sharedLibraryHandle(other.sharedLibraryHandle),
 		referenceCount(other.referenceCount),
 		getEngineVersionAddress(other.getEngineVersionAddress),
@@ -53,7 +53,7 @@ namespace PluginEngine {
 	}
 
 	// Destroys the plugin, unloading its library when no more references to it exist.
-	Plugin::~Plugin()
+	PLUGINENGINE_API Plugin::~Plugin()
 	{
 		int remainingReferences = --*(this->referenceCount);
 		if (remainingReferences == 0) {

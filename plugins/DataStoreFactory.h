@@ -2,6 +2,7 @@
 #define PLUGINENGINE_DATA_STORE_FACTORY_H
 
 #include "Config.h"
+#include "Common.h"
 
 #include <vector>
 #include <string>
@@ -18,12 +19,6 @@ namespace PluginEngine {
 
   	  // Manages output from our object detector
   	  public: class DataStore {
-  	  	  public: typedef struct Rect {
-  	  		  int x;
-  	  		  int y;
-  	  		  int width;
-  	  		  int height;
-  	  	  } Rect;
 
   		  // Releases any resources owned by the store
       	  public: virtual ~DataStore() {}

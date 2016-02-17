@@ -5,23 +5,55 @@
 #include "FileWriter.hpp"
 
 #include <sstream>
+#include <iostream>
 
 namespace PluginEngine {
 
 	// File data store
 	class FileDataStore : public DataStoreFactory::DataStore {
 
+		// Creates a file data store
+		public: FILEDATASTOREPLUGIN_API FileDataStore()
+		{
+			_name = std::string("FileDataStore");
+
+			_processDir = std::string(".");
+			_outDir = std::string(".");
+		}
+
+		public: FILEDATASTOREPLUGIN_API FileDataStore(std::map<std::string, std::string> args)
+		{
+			std::map<std::string, std::string>::iterator it;
+
+			it = args.find("name");
+			if (it != args.end()) {
+				_name = std::string(it->second);
+			} else
+				_name = std::string("FileDataStore");
+
+			it = args.find("process_directory");
+			if (it != args.end()) {
+				_processDir = std::string(it->second);
+			} else
+				_processDir = std::string(".");
+
+			it = args.find("output_directory");
+			if (it != args.end()) {
+				_outDir = it->second;
+			} else
+				_outDir = std::string(".");
+		}
+
 		// Destroys a file data store
 		public: FILEDATASTOREPLUGIN_API virtual ~FileDataStore() {}
 
 		// Gets the name of the data store
 		public: FILEDATASTOREPLUGIN_API virtual const std::string &getName() const {
-			static std::string sName("FileDataStore");
-			return sName;
+			return _name;
 		}
 
 		FILEDATASTOREPLUGIN_API std::map<std::string, std::vector<std::pair<Rect, std::string> > >
-		getAnnotations( std::string processDir )
+		getAnnotations(std::string processDir)
 		{
 			std::map<std::string, std::vector<std::pair<Rect, std::string> > > result;
 
@@ -38,14 +70,14 @@ namespace PluginEngine {
 				ss << name;
 				ss << std::endl;
 			}
-			for ( ; wf != objs.end(); wf++ ) {
+			for ( ; wf != objs.end(); wf++) {
 				ss << name << "," << classe << "," << wf->x << "," << wf->y
 						<< "," << wf->width << "," << wf->height;
 
 				ss << std::endl;
 			}
-			FileWriter::writeToFile( FileWriter::getLeafDirName(_processDir)+".dat", ss.str() );
-			FileWriter::setFileContent( _outDir+"/"+FileWriter::getFileNameNoExt(name)+".dat", ss.str() );
+			FileWriter::writeToFile(FileWriter::getLeafDirName(_processDir)+".dat", ss.str());
+			FileWriter::setFileContent(_outDir+"/"+FileWriter::getFileNameNoExt(name)+".dat", ss.str());
 		}
 
 		FILEDATASTOREPLUGIN_API void writeAnnotations(std::string name,
@@ -56,20 +88,22 @@ namespace PluginEngine {
 
 			if (objs.empty())
 				ss << name;
-			for ( ; wf != objs.end(); wf++ ) {
+			for ( ; wf != objs.end(); wf++) {
 				ss << name << "," << wf->first.x << "," << wf->first.y << ","
 						<< wf->first.width << "," << wf->first.height << "," << wf->second;
 
 				ss << std::endl;
 			}
 
-			FileWriter::writeToFile( FileWriter::getLeafDirName(_processDir)+".dat", ss.str() );
-			FileWriter::setFileContent( _outDir+"/"+FileWriter::getFileNameNoExt(name)+".dat", ss.str() );
+			FileWriter::writeToFile(FileWriter::getLeafDirName(_processDir)+".dat", ss.str());
+			FileWriter::setFileContent(_outDir+"/"+FileWriter::getFileNameNoExt(name)+".dat", ss.str());
 		}
 
 		public:
-			std::string _processDir = std::string(".");
-			std::string _outDir = std::string(".");
+			std::string _name;
+
+			std::string _processDir;
+			std::string _outDir;
 	};
 
 	// Retrieve the engine version we're going to expect
@@ -78,9 +112,11 @@ namespace PluginEngine {
 	}
 
 	// Register the plugin to an engine kernel
-	extern "C" FILEDATASTOREPLUGIN_API void registerPlugin(Kernel &kernel) {
+	extern "C" FILEDATASTOREPLUGIN_API void registerPlugin(Kernel &kernel,
+			std::map<std::string, std::string> &args)
+	{
 		kernel.getDataStoreFactory().addDataStore(
-				std::auto_ptr<DataStoreFactory::DataStore>(new FileDataStore())
+				std::auto_ptr<DataStoreFactory::DataStore>(new FileDataStore(args))
 		);
 	}
 

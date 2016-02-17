@@ -1,9 +1,14 @@
 # eclipse files
 .cproject
 .project
+.settings/
 
 # built file
 *.o
 *.so*
 odf
 
+# tests and logs
+benchmark/
+benchmark_out/
+logs/

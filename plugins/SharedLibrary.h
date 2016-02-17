@@ -6,6 +6,8 @@
 #include <string>
 #include <stdexcept>
 
+#include <iostream>
+
 #if defined(PLUGINENGINE_WIN32)
 
 #define WIN32_LEAN_AND_MEAN
@@ -86,10 +88,16 @@ namespace PluginEngine {
   	  // Loads the shared object from the specified path
   	  public: PLUGINENGINE_API static HandleType Load(const std::string &path)
   	  {
-  		  // std::string pathWithExtension = std::string("./lib") + path + ".so";
-  		  std::string pathWithExtension = path;
+  		  ::dlerror(); // clear error value
 
+  		  std::string pathWithExtension = path;
   		  void *sharedObject = ::dlopen(pathWithExtension.c_str(), RTLD_NOW);
+
+  		  const char *error = ::dlerror(); // check for error
+  		  if (error != NULL) {
+  			  throw std::runtime_error(error);
+  		  }
+
   		  if (sharedObject == NULL) {
   			  throw std::runtime_error(
   					  std::string("Could not load '") + pathWithExtension + "'"

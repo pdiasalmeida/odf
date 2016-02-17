@@ -1,9 +1,9 @@
 CC		=	g++
-CFLAGS	=	-fPIC -c -Wall -O3
-LDFLAGS	=	-lODFPluginEngine
+CFLAGS	=	-fPIC -c -Wall -O3 `pkg-config --cflags opencv`
+LDFLAGS	=	`pkg-config --libs opencv` -lODFPluginEngine
 
-TARGET	=	libFileDataStore.so
-SOURCES	=	FileWriter.cpp FileDataStore.cpp
+TARGET	=	libCascadeDetector.so
+SOURCES	=	CascadeClassifierDetector.cpp
 OBJECTS	=	$(SOURCES:.cpp=.o)
 
 all: $(TARGET)

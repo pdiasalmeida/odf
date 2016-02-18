@@ -72,7 +72,8 @@ void FileWriter::close()
 {
 	std::map< std::string, std::ofstream* >::iterator it = FileWriter::_files.begin();
 	for ( ; it != FileWriter::_files.end(); it++ ) {
-		it->second->close();
+		if (it->second)
+			it->second->close();
 	}
 }
 

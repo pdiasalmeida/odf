@@ -71,7 +71,7 @@ namespace PluginEngine {
 			} else
 				_maxSize = cv::Size(350, 150);
 
-			it = args.find("filePath");
+			it = args.find("cascadePath");
 			if (it != args.end()) {
 				_path = std::string(it->second);
 			} else
@@ -93,7 +93,7 @@ namespace PluginEngine {
 		{
 			if (!cascade.load(_path)) {
 				std::cout << "--(!) Error loading cascade " + _path
-						<< "Check if file exists in path." << std::endl;
+						<< "\n\tCheck if file exists in path." << std::endl;
 			};
 		}
 

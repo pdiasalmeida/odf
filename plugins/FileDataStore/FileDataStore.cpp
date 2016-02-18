@@ -19,6 +19,8 @@ namespace PluginEngine {
 
 			_processDir = std::string(".");
 			_outDir = std::string(".");
+
+			FileWriter::openFile(_outDir, FileWriter::getLeafDirName(_processDir)+".out");
 		}
 
 		public: FILEDATASTOREPLUGIN_API FileDataStore(std::map<std::string, std::string> args)
@@ -42,10 +44,15 @@ namespace PluginEngine {
 				_outDir = it->second;
 			} else
 				_outDir = std::string(".");
+
+			FileWriter::openFile(_outDir, FileWriter::getLeafDirName(_processDir)+".out");
 		}
 
 		// Destroys a file data store
-		public: FILEDATASTOREPLUGIN_API virtual ~FileDataStore() {}
+		public: FILEDATASTOREPLUGIN_API virtual ~FileDataStore()
+		{
+			//FileWriter::close();
+		}
 
 		// Gets the name of the data store
 		public: FILEDATASTOREPLUGIN_API virtual const std::string &getName() const {
@@ -76,7 +83,7 @@ namespace PluginEngine {
 
 				ss << std::endl;
 			}
-			FileWriter::writeToFile(FileWriter::getLeafDirName(_processDir)+".dat", ss.str());
+			FileWriter::writeToFile(FileWriter::getLeafDirName(_processDir)+".out", ss.str());
 			FileWriter::setFileContent(_outDir+"/"+FileWriter::getFileNameNoExt(name)+".dat", ss.str());
 		}
 
@@ -95,7 +102,7 @@ namespace PluginEngine {
 				ss << std::endl;
 			}
 
-			FileWriter::writeToFile(FileWriter::getLeafDirName(_processDir)+".dat", ss.str());
+			FileWriter::writeToFile(FileWriter::getLeafDirName(_processDir)+".out", ss.str());
 			FileWriter::setFileContent(_outDir+"/"+FileWriter::getFileNameNoExt(name)+".dat", ss.str());
 		}
 
